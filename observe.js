@@ -2,6 +2,7 @@ class Observer{
     constructor(data){
         this.data = data;
         this.observer(this.data);
+        this.proxy(_this,this.data);
     }
     observer(data){
        if(typeof data !== 'object') return
@@ -28,6 +29,22 @@ class Observer{
                 value = newValue;
                 dep.notify(newValue);
             }
+        });
+    }
+    
+     //数据代理（在一个对象中，可以动态的访问和设置另一个对象属性）
+    proxy(_this,data){
+        Object.keys(data).forEach(key=>{
+            console.log(_this)
+            Object.defineProperty(_this,key,{
+                get(){
+                    return data[key]
+                },
+                set(newValue){
+                    if(newValue == data[key]) return
+                    data[key] = newValue;
+                }
+            });
         });
     }
 }
